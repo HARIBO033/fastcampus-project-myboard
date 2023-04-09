@@ -2,6 +2,7 @@ package com.fastcampus.projectmyboard.repository;
 
 import com.fastcampus.projectmyboard.config.JpaConfig;
 import com.fastcampus.projectmyboard.domain.Article;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,8 +77,9 @@ class JpaRepositoryTest {
         Article article = articleRepository.findById(1L).orElseThrow();
         long previousArticleCount = articleRepository.count();
         //도메인에 article을 삭제하면 연관된 articleComment도 삭제하도록 cascade 설계를 해놓았기 때문에 같이 검사
-        long previousArticleCommentCount = articleRepository.count();
+        long previousArticleCommentCount = articleCommentRepository.count();
         int deleteCommentsSize = article.getArticleComments().size();
+        System.out.println(deleteCommentsSize+" @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         //When
         articleRepository.delete(article);
 
@@ -85,4 +87,5 @@ class JpaRepositoryTest {
         assertThat(articleRepository.count()).isEqualTo(previousArticleCount - 1);
         assertThat(articleCommentRepository.count()).isEqualTo(previousArticleCommentCount - deleteCommentsSize );
     }
+
 }
