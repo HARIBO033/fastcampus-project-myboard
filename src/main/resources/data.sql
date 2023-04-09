@@ -99,7 +99,7 @@ insert into article (title, content, hashtag, created_by, modified_by, created_a
 insert into article (title, content, hashtag, created_by, modified_by, created_at, modified_at) values ('Etiam vel augue.', 'Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque.', 'Yellow', 'Kamila', 'Rudd', '2022-09-07 16:58:47', '2022-07-17 09:18:34');
 insert into article (title, content, hashtag, created_by, modified_by, created_at, modified_at) values ('Maecenas rhoncus aliquam lacus.', 'Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque.', null, 'Connie', 'De', '2022-07-28 23:33:40', '2022-09-21 19:11:02');
 
-
+insert into article_comment (article_id, content, created_at, modified_at, created_by, modified_by) values (1, 'Haribo', '2022-02-22 22:22:22', '2022-09-16 20:08:53', 'haribo', 'haribo');
 insert into article_comment (article_id, content, created_at, modified_at, created_by, modified_by) values (1, 'Honorable', '2022-04-24 19:51:25', '2022-09-16 20:08:53', 'Yvette', 'Cletis');
 insert into article_comment (article_id, content, created_at, modified_at, created_by, modified_by) values (2, 'Rev', '2022-04-05 04:44:16', '2023-01-04 17:36:53', 'Dorie', 'Isabelita');
 insert into article_comment (article_id, content, created_at, modified_at, created_by, modified_by) values (3, 'Mr', '2022-06-22 02:39:47', '2022-09-10 09:14:36', 'Orion', 'Margarethe');
