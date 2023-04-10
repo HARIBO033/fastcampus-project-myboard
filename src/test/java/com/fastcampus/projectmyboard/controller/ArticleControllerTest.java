@@ -25,7 +25,7 @@ class ArticleControllerTest {
     void 게시글_리스트_페이지_정상호출테스트() throws Exception {
         mockMvc.perform(get("/articles"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.TEXT_HTML))
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(MockMvcResultMatchers.model().attributeExists("articles"));
     }
 
@@ -33,7 +33,7 @@ class ArticleControllerTest {
     void 게시글_상세페이지_정상호출테스트() throws Exception {
         mockMvc.perform(get("/articles/1"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.TEXT_HTML))
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.TEXT_HTML))
                 .andExpect(model().attributeExists("articles"));
     }
 
@@ -41,13 +41,13 @@ class ArticleControllerTest {
     void 게시글_검색_정상호출테스트() throws Exception {
         mockMvc.perform(get("/articles/search"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.TEXT_HTML));
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.TEXT_HTML));
     }
 
     @Test
     void 게시글_해쉬태그검색_페이지_정상호출테스트() throws Exception {
         mockMvc.perform(get("/articles/search-hashtag"))
                 .andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.content().contentType(MediaType.TEXT_HTML));
+                .andExpect(MockMvcResultMatchers.content().contentTypeCompatibleWith(MediaType.TEXT_HTML));
     }
 }
