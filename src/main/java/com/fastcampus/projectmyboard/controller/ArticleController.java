@@ -2,11 +2,20 @@ package com.fastcampus.projectmyboard.controller;
 
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/articles")
 public class ArticleController {
-    //controllertest 만들어야됨
+
+    @GetMapping
+    public String articles(ModelMap modelMap){
+        modelMap.addAttribute("articles", List.of());
+        return "articles/index";
+    }
+
 }
