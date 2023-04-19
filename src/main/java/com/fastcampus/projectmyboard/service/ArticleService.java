@@ -50,9 +50,10 @@ public class ArticleService {
     public void updateArticle(ArticleDto dto) {
         try {
             Article article = articleRepository.getReferenceById(dto.id());
-            if (dto.title() != null) { article.setTitle(dto.title()); }
+            if (dto.title() != null) { article.setTitle(dto.title()); }//dto의 타입을 record로 선언해놔서 dto.getTitle이 아니라 dto.title 로 쓸 수 있다.(자바 13,14버전 부터 사용가능)
             if (dto.content() != null) { article.setContent(dto.content()); }
             article.setHashtag(dto.hashtag());
+            //Transactional 로 묶여있어서 save()를 하지않아도 업데이트가 된다
         } catch (EntityNotFoundException e) {
             log.warn("게시글 업데이트 실패. 게시글을 찾을 수 없습니다 - dto: {}", dto);
         }
