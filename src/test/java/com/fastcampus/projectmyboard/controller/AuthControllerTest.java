@@ -1,8 +1,10 @@
 package com.fastcampus.projectmyboard.controller;
 
 import com.fastcampus.projectmyboard.config.SecurityConfig;
+
 import com.fastcampus.projectmyboard.service.ArticleService;
 import com.fastcampus.projectmyboard.service.PaginationService;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +17,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @DisplayName("View 컨트롤러 - 인증")
 @Import(SecurityConfig.class)
