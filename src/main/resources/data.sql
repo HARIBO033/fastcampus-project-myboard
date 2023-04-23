@@ -1,13 +1,11 @@
 -- 테스트 계정
 -- TODO: 테스트용이지만 비밀번호가 노출된 데이터 세팅. 개선하는 것이 좋을 지 고민해 보자.
-insert into user_account (user_id, user_password, nickname, email, memo, created_at, created_by, modified_at,
-                          modified_by)
+
+insert into user_account (user_id, user_password, nickname, email, memo, created_at, created_by, modified_at,modified_by)
 values ('haribo', 'asdf1234', 'haribo', 'haribo@mail.com', 'I am haribo.', now(), 'haribo', now(), 'haribo')
 ;
-insert into user_account (user_id, user_password, nickname, email, memo, created_at, created_by, modified_at,
-                          modified_by)
-values ('haribo2', 'asdf1234', 'haribo2', 'haribo2@mail.com', 'I am haribo2.', now(), 'haribo2', now(), 'haribo2')
-;
+insert into user_account (user_id, user_password, nickname, email, memo, created_at, created_by, modified_at,modified_by)
+values ('haribo2', 'asdf1234', 'haribo2', 'haribo2@mail.com', 'I am haribo.', now(), 'haribo2', now(), 'haribo2');
 -- 123 게시글
 insert into article (user_account_id, title, content, hashtag, created_by, modified_by, created_at, modified_at)
 values (2, 'Quisque ut erat.', 'Vestibulum quam sapien, varius ut, blandit non, interdum in, ante. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio. Curabitur convallis.
@@ -26,7 +24,7 @@ Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.', '#purple'
         'Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Duis faucibus accumsan odio.',
         'Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem.', '#purple', 'Adams', 'Thalia',
         '2021-08-13 08:32:22', '2021-04-02 02:58:19'),
-       (1, 'Fusce posuere felis sed lacus.', 'Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.',
+       (2, 'Fusce posuere felis sed lacus.', 'Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi.',
         '#mauv', 'Johny', 'Constantin', '2021-09-05 04:28:16', '2021-10-31 17:46:08'),
        (1, 'Aliquam erat volutpat.',
         'Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl.',
