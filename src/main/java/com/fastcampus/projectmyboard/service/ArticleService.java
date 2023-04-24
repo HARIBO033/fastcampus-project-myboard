@@ -1,11 +1,12 @@
 package com.fastcampus.projectmyboard.service;
 
 import com.fastcampus.projectmyboard.domain.Article;
-import com.fastcampus.projectmyboard.domain.type.SearchType;
+import com.fastcampus.projectmyboard.domain.UserAccount;
+import com.fastcampus.projectmyboard.domain.constant.SearchType;
 import com.fastcampus.projectmyboard.dto.ArticleDto;
 import com.fastcampus.projectmyboard.dto.ArticleWithCommentsDto;
 import com.fastcampus.projectmyboard.repository.ArticleRepository;
-import jakarta.persistence.EntityNotFoundException;
+import com.fastcampus.projectmyboard.repository.UserAccountRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jakarta.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Slf4j
@@ -22,6 +24,7 @@ import java.util.List;
 public class ArticleService {
 
   private final ArticleRepository articleRepository;
+  private final UserAccountRepository userAccountRepository;
 
   @Transactional(readOnly = true)
   public Page<ArticleDto> searchArticles(SearchType searchType, String searchKeyword, Pageable pageable) {
@@ -33,34 +36,36 @@ public class ArticleService {
       case TITLE -> articleRepository.findByTitleContaining(searchKeyword, pageable).map(ArticleDto::from);
       case CONTENT -> articleRepository.findByContentContaining(searchKeyword, pageable).map(ArticleDto::from);
       case ID -> articleRepository.findByUserAccount_UserIdContaining(searchKeyword, pageable).map(ArticleDto::from);
-      case NICKNAME ->
-              articleRepository.findByUserAccount_NicknameContaining(searchKeyword, pageable).map(ArticleDto::from);
+      case NICKNAME -> articleRepository.findByUserAccount_NicknameContaining(searchKeyword, pageable).map(ArticleDto::from);
       case HASHTAG -> articleRepository.findByHashtag("#" + searchKeyword, pageable).map(ArticleDto::from);
     };
   }
 
   @Transactional(readOnly = true)
-  public ArticleWithCommentsDto getArticle(Long articleId) {
+  public ArticleWithCommentsDto getArticleWithComments(Long articleId) {
     return articleRepository.findById(articleId)
             .map(ArticleWithCommentsDto::from)
             .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId));
   }
 
-  public void saveArticle(ArticleDto dto) {
-    articleRepository.save(dto.toEntity());
+  @Transactional(readOnly = true)
+  public ArticleDto getArticle(Long articleId) {
+    return articleRepository.findById(articleId)
+            .map(ArticleDto::from)
+            .orElseThrow(() -> new EntityNotFoundException("게시글이 없습니다 - articleId: " + articleId));
   }
 
-  public void updateArticle(ArticleDto dto) {
+  public void saveArticle(ArticleDto dto) {
+    UserAccount userAccount = userAccountRepository.getReferenceById(dto.userAccountDto().userId());
+    articleRepository.save(dto.toEntity(userAccount));
+  }
+
+  public void updateArticle(Long articleId, ArticleDto dto) {
     try {
-      Article article = articleRepository.getReferenceById(dto.id());
-      if (dto.title() != null) {
-        article.setTitle(dto.title());
-      }//dto의 타입을 record로 선언해놔서 dto.getTitle이 아니라 dto.title 로 쓸 수 있다.(자바 13,14버전 부터 사용가능)
-      if (dto.content() != null) {
-        article.setContent(dto.content());
-      }
+      Article article = articleRepository.getReferenceById(articleId);
+      if (dto.title() != null) { article.setTitle(dto.title()); }
+      if (dto.content() != null) { article.setContent(dto.content()); }
       article.setHashtag(dto.hashtag());
-      //Transactional 로 묶여있어서 save()를 하지않아도 업데이트가 된다
     } catch (EntityNotFoundException e) {
       log.warn("게시글 업데이트 실패. 게시글을 찾을 수 없습니다 - dto: {}", dto);
     }
@@ -70,19 +75,21 @@ public class ArticleService {
     articleRepository.deleteById(articleId);
   }
 
-  public long getArticleCount(){
+  public long getArticleCount() {
     return articleRepository.count();
   }
 
   @Transactional(readOnly = true)
   public Page<ArticleDto> searchArticlesViaHashtag(String hashtag, Pageable pageable) {
-    if(hashtag == null || hashtag.isBlank()){
+    if (hashtag == null || hashtag.isBlank()) {
       return Page.empty(pageable);
     }
-    return articleRepository.findByHashtag(hashtag,pageable).map(ArticleDto::from);
+
+    return articleRepository.findByHashtag(hashtag, pageable).map(ArticleDto::from);
   }
 
   public List<String> getHashtags() {
     return articleRepository.findAllDistinctHashtags();
   }
+
 }
