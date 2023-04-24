@@ -47,7 +47,7 @@ class JpaRepositoryTest {
                 .hasSize(123);
     }
 
-    @Disabled // TODO : UserAccountRepository 아직 안만들어서 insert 테스트 Disabled 처리 해놓음, 추가예정
+    //@Disabled // TODO : UserAccountRepository 아직 안만들어서 insert 테스트 Disabled 처리 해놓음, 추가예정
     @DisplayName("insert 테스트")
     @Test
     void givenTestData_whenInserting_thenWorksFine() {
