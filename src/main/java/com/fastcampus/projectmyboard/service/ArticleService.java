@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.persistence.EntityNotFoundException;
+
 import java.util.List;
 
 @Slf4j
@@ -36,7 +37,8 @@ public class ArticleService {
       case TITLE -> articleRepository.findByTitleContaining(searchKeyword, pageable).map(ArticleDto::from);
       case CONTENT -> articleRepository.findByContentContaining(searchKeyword, pageable).map(ArticleDto::from);
       case ID -> articleRepository.findByUserAccount_UserIdContaining(searchKeyword, pageable).map(ArticleDto::from);
-      case NICKNAME -> articleRepository.findByUserAccount_NicknameContaining(searchKeyword, pageable).map(ArticleDto::from);
+      case NICKNAME ->
+              articleRepository.findByUserAccount_NicknameContaining(searchKeyword, pageable).map(ArticleDto::from);
       case HASHTAG -> articleRepository.findByHashtag("#" + searchKeyword, pageable).map(ArticleDto::from);
     };
   }
@@ -63,16 +65,25 @@ public class ArticleService {
   public void updateArticle(Long articleId, ArticleDto dto) {
     try {
       Article article = articleRepository.getReferenceById(articleId);
-      if (dto.title() != null) { article.setTitle(dto.title()); }
-      if (dto.content() != null) { article.setContent(dto.content()); }
+      UserAccount userAccount = userAccountRepository.getReferenceById(dto.userAccountDto().userId());
+
+      //인증 된 사용자와 게시글의 사용자가 동일한지 검사
+      if (article.getUserAccount().equals(userAccount)) {
+        if (dto.title() != null) {
+          article.setTitle(dto.title());
+        }
+        if (dto.content() != null) {
+          article.setContent(dto.content());
+        }
+      }
       article.setHashtag(dto.hashtag());
     } catch (EntityNotFoundException e) {
-      log.warn("게시글 업데이트 실패. 게시글을 찾을 수 없습니다 - dto: {}", dto);
+      log.warn("게시글 업데이트 실패. 게시글 수정에 필요한 정보를 찾을 수 없습니다 - {}", e.getLocalizedMessage());
     }
   }
 
-  public void deleteArticle(long articleId) {
-    articleRepository.deleteById(articleId);
+  public void deleteArticle(long articleId, String userId) {
+    articleRepository.deleteByIdAndUserAccount_UserId(articleId, userId);
   }
 
   public long getArticleCount() {
